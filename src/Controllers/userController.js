@@ -21,7 +21,7 @@ const loginUser = async(req, res) => {
         }, 1200*1000);
 
         res.cookie('userId',userId, { maxAge: 900000, httpOnly: true });
-        res.redirect('/public/recipesList.html');
+        res.redirect('https://recipmeappfrontend.herokuapp.com/recipesList.html');
     })
 }
 
@@ -29,7 +29,7 @@ const userConnected = async(req, res, next) => {
     var userId = req.cookies.userId;
 
     if(userId === undefined || !connectedUsers.includes(userId)){
-        return res.redirect('/public/login.html');
+        return res.redirect('https://recipmeappfrontend.herokuapp.com/login.html');
     }
 
     return next();
