@@ -18,7 +18,7 @@ const saveRecipe = async(req, res) => {
     const recipeToSave = new recipeData(recipeParams);
     recipeToSave.save().then(() =>{
         console.log("success!!!");
-        res.redirect('https://michalglozman.github.io/RecipiesAppFrontend/schedule.html?user=${userId}');
+        res.redirect(`https://michalglozman.github.io/RecipiesAppFrontend/schedule.html?user=${userId}`);
     }).catch((e) => {
         console.error("Error When adding recipe" + e);
         res.status(500);
