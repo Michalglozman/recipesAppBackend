@@ -18,7 +18,7 @@ const saveRecipe = async(req, res) => {
     const recipeToSave = new recipeData(recipeParams);
     recipeToSave.save().then(() =>{
         console.log("success!!!");
-        res.redirect('https://recipmeappfrontend.herokuapp.com/schedule.html');
+        res.redirect('https://michalglozman.github.io/RecipiesAppFrontend/schedule.html');
     }).catch((e) => {
         console.error("Error When adding recipe" + e);
         res.status(500);
