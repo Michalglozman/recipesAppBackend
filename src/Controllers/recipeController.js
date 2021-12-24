@@ -6,7 +6,7 @@ const saveRecipe = async(req, res) => {
     const url = req.body.url;
     const imageUrl = req.body.imgUrl;
     const recipeName = req.body.recipeName;
-    var userId = req.cookies.userId
+    var userId = req.query.user;
 
     const recipeParams = {};
     recipeParams['day'] = day;
@@ -18,7 +18,7 @@ const saveRecipe = async(req, res) => {
     const recipeToSave = new recipeData(recipeParams);
     recipeToSave.save().then(() =>{
         console.log("success!!!");
-        res.redirect('https://michalglozman.github.io/RecipiesAppFrontend/schedule.html');
+        res.redirect('https://michalglozman.github.io/RecipiesAppFrontend/recipesList.html/schedule.html');
     }).catch((e) => {
         console.error("Error When adding recipe" + e);
         res.status(500);
@@ -60,7 +60,7 @@ const getRecipesByIngredients = async(req, res) => {
   } 
 
   const getRecipesByUser = async(req, res) => {
-    const user = req.cookies.userId;
+    const user = req.query.user;
     recipeData.find({userId: user}).then((recipes) =>{
         res.send(recipes);
     }).catch((e) => {
