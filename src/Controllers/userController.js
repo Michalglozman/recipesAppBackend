@@ -1,5 +1,5 @@
-const axios = require('axios')
-const userData = require('../Model/user')
+const axios = require('axios');
+const userData = require('../Model/user');
 const path = require('path');
 const connectedUsers = [];
 

@@ -1,5 +1,5 @@
-const axios = require('axios')
-const recipeData = require('../Model/recipe')
+const axios = require('axios');
+const recipeData = require('../Model/recipe');
 const saveRecipe = async(req, res) => {
     const request_data = req.body;
     const day = req.body.day;
@@ -52,11 +52,11 @@ const getRecipesByIngredients = async(req, res) => {
         };
     axios.get("https://api.edamam.com/api/recipes/v2",{params})
         .then(response => {
-            res.send(response.data.hits)
+            res.send(response.data.hits);
         })
         .catch(error => {
-            console.error(error)
-            res.status(500).send("Get recipe by ingredients failed")
+            console.error(error);
+            res.status(500).send("Get recipe by ingredients failed");
         })
   } 
 

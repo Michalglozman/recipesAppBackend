@@ -1,15 +1,11 @@
 require('./src/db/mongoose');
 const path = require('path');
-
-var cookieParser = require('cookie-parser')
-
 const express= require ('express');
 require('dotenv').config();
 const app= express();
-app.use(cookieParser())
 app.use(express.urlencoded( { extended: true } ));
 app.use('/public',express.static(`${__dirname}/public/`));
-app.use(express.json())
+app.use(express.json());
 app.use(cookieParser());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -18,8 +14,8 @@ app.use((req, res, next) => {
     res.set('Content-Type', 'application/json');
     next();
    });
-const userRouter = require('./src/Router/userRouter')
-const recipeRouter = require('./src/Router/recipeRouter.js')
+const userRouter = require('./src/Router/userRouter');
+const recipeRouter = require('./src/Router/recipeRouter.js');
 app.use('/user/', userRouter);
 app.use('/recipe/', recipeRouter);
 
