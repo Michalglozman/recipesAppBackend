@@ -29,6 +29,7 @@ const userConnected = async(req, res, next) => {
     var userId = req.cookies.userId;
 
     if(userId === undefined || !connectedUsers.includes(userId)){
+        console.log(userId + "is not in" + connectedUsers);
         return res.redirect('https://michalglozman.github.io/RecipiesAppFrontend/login.html');
     }
 
