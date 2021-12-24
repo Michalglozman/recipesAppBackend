@@ -25,6 +25,9 @@ const loginUser = async(req, res) => {
 
 const userConnected = async(req, res, next) => {
     var userId = req.query.user;
+    if (userId===undefined) {
+        userId = req.params.user;
+    }
     console.log("user "+ userId + " is accesing the server" + "query " +req.query)
     if(userId === undefined || !connectedUsers.includes(userId)){
         console.log(userId + "is not in" + connectedUsers);
