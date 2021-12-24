@@ -27,6 +27,7 @@ const saveRecipe = async(req, res) => {
 
 const deleteRecipe = async(req, res) => {
     const id = req.params.id;
+    console.log("deleting: " + id);
     recipeData.findOne({ _id: id}).then((recipe) =>{
         if(!recipe){
             return res.status(400).send("Recipe dosent exist");
