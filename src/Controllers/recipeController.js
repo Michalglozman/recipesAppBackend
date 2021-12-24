@@ -26,7 +26,7 @@ const saveRecipe = async(req, res) => {
 }
 
 const deleteRecipe = async(req, res) => {
-    const id = req.params.id;
+    const id = req.query.id;
     console.log("deleting: " + id);
     recipeData.findOne({ _id: id}).then((recipe) =>{
         if(!recipe){

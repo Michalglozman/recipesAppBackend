@@ -7,6 +7,6 @@ router.all('*', userController.userConnected);
 router.get('/ingredients/', recipeController.getRecipesByIngredients );
 router.post('/', recipeController.saveRecipe);
 router.get('/',  recipeController.getRecipesByUser);
-router.delete('/:id/:user',  recipeController.deleteRecipe);
+router.delete('/',  recipeController.deleteRecipe);
 
 module.exports = router;
