@@ -1,5 +1,6 @@
 const axios = require('axios');
 const recipeData = require('../Model/recipe');
+const recipeBlackList = require('../Model/recipeBlackList');
 const saveRecipe = async(req, res) => {
     let day = req.body.day;
     const hour = req.body.hour;
@@ -24,7 +25,7 @@ const saveRecipe = async(req, res) => {
     recipeParams['ingredients'] = ingredients;
     recipeParams['recipeName'] = recipeName;
     recipeParams['description'] = description;
-    recipeParams['approved'] = recipeType == 0 ? "approved" : "wating";
+    recipeParams['approved'] = recipeType == 0 ? "approved" : "waiting";
     recipeParams['week'] = week;
     recipeParams['day'] = day;
     const recipeToSave = new recipeData(recipeParams);
@@ -67,8 +68,22 @@ const deleteRecipe = async(req, res) => {
     })
 }
 
+const getBlackList = async () => {
+    const blacklist = await recipeBlackList.find({}).exec().then((blackList)=>{
+        return blackList.map((entry)=> {
+            return entry['url'];
+        });
+    }).catch((err)=>{
+        console.log(err);
+        return [];
+    });
+    return blacklist;
+}
+
 const getRecipesByIngredients = async(req, res) => {
     const ingredients = req.query.ingredients;
+    const blackList = await getBlackList();
+    console.log(blackList);
     const params = {
         app_id: `${process.env.FOOD_API_ID}`,
         app_key: `${process.env.FOOD_API_KEY}`,
@@ -77,7 +92,10 @@ const getRecipesByIngredients = async(req, res) => {
         };
     axios.get("https://api.edamam.com/api/recipes/v2",{params})
         .then(response => {
-            res.send(response.data.hits);
+            const recipes = response.data.hits.filter((element)=>{
+                return !blackList.includes(element['recipe']['url']);
+            });
+            res.send(recipes);
         })
         .catch(error => {
             console.error(error);
@@ -98,6 +116,26 @@ const getRecipesByIngredients = async(req, res) => {
     }
     recipeData.find(query).then((recipes) =>{
         res.send(recipes);
+    }).catch((e) => {
+        res.status(500).send();
+    });
+  } 
+
+  const getRecipesToApprove = async(req, res) => {
+    const query ={'approved': 'waiting'};
+    recipeData.find(query).then((recipes) =>{
+        res.send(recipes);
+    }).catch((e) => {
+        res.status(500).send();
+    });
+  } 
+
+  const changeApprovalStatus = async(req, res) => {
+    const id = req.body.id;
+    const approved = req.body.approved;
+    const recipeParams = {'approved':approved}
+    recipeData.findOneAndUpdate({_id: id},recipeParams).then(() =>{
+        res.status(200).send();
     }).catch((e) => {
         res.status(500).send();
     });
@@ -127,4 +165,4 @@ const getRecipesByIngredients = async(req, res) => {
         res.status(500).send();
     });
   } 
-  module.exports={updateRecipe,deleteRecipe,saveRecipe,getRecipesByIngredients,getRecipesByUser};
+  module.exports={getRecipesToApprove,changeApprovalStatus,updateRecipe,deleteRecipe,saveRecipe,getRecipesByIngredients,getRecipesByUser};
