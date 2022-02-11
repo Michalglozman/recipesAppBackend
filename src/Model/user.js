@@ -13,6 +13,9 @@ const userData = mongoose.model('user', {
     },
     password:{
         type: String
+    },
+    userType: {
+        type: int
     }
 },'user');
 

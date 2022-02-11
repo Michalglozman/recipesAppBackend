@@ -1,39 +1,22 @@
-const axios = require('axios')
-const userData = require('../Model/user')
+const axios = require('axios');
+const userData = require('../Model/user');
 const path = require('path');
-const connectedUsers = [];
 
 const loginUser = async(req, res) => {
     const userId = req.query.userId;
     const password = req.query.password;
-
     userData.findOne({ userId: userId, password:password}).then((user) =>{
         res.setHeader("Content-Type", "text/plain");
         if(!user){
             return res.status(404).send("login failed");
         }
-        connectedUsers.push(userId);
-        setTimeout(()=>{
-            console.log("removing "+userId);
-            index=connectedUsers.indexOf(userId);
-            connectedUsers.splice(index, 1);
-        }, 1200*1000);
+        console.log(userId+" connected")
 
-        res.redirect(`https://michalglozman.github.io/RecipiesAppFrontend/recipesList.html?user=${userId}`);
+        return res.status(200).send(user);
+    }).catch((err)=>{
+        console.log(err);
+        return res.status(500);
     })
 }
 
-const userConnected = async(req, res, next) => {
-    var userId = req.query.user;
-    if (userId===undefined) {
-        userId = req.params.user;
-    }
-    console.log("user "+ userId + " is accesing the server" + "query " +req.query)
-    if(userId === undefined || !connectedUsers.includes(userId)){
-        console.log(userId + "is not in" + connectedUsers);
-        return res.status(403);
-    }
-
-    return next();
-}
-module.exports={userConnected,loginUser};
+module.exports={loginUser};
