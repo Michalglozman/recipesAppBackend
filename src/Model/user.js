@@ -15,7 +15,7 @@ const userData = mongoose.model('user', {
         type: String
     },
     userType: {
-        type: int
+        type: Number
     }
 },'user');
 

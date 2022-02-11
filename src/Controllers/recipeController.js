@@ -1,15 +1,17 @@
 const axios = require('axios');
 const recipeData = require('../Model/recipe');
 const saveRecipe = async(req, res) => {
-    const day = req.body.day;
+    let day = req.body.day;
     const hour = req.body.hour;
-    const week = req.body.week;
-    const type = req.body.type; //0 from the internet 1 personal
+    let week = req.body.week;
+    const recipeType = req.body.recipeType; //0 from the internet 1 personal
     const ingredients = req.body.ingredients;
     const url = req.body.url;
     const imageUrl = req.body.imgUrl;
     const recipeName = req.body.recipeName;
     const userId = req.body.user;
+    const description = req.body.description;
+    const repeat = req.body.repeat;
 
     const recipeParams = {};
     recipeParams['day'] = day;
@@ -18,13 +20,28 @@ const saveRecipe = async(req, res) => {
     recipeParams['url'] = url;
     recipeParams['hour'] = hour;
     recipeParams['week'] = week;
-    recipeParams['type'] = type;
+    recipeParams['recipeType'] = recipeType;
     recipeParams['ingredients'] = ingredients;
     recipeParams['recipeName'] = recipeName;
-    recipeParams['approved'] = type == 0 ? true : false;
-
+    recipeParams['description'] = description;
+    recipeParams['approved'] = recipeType == 0 ? "approved" : "wating";
+    recipeParams['week'] = week;
+    recipeParams['day'] = day;
     const recipeToSave = new recipeData(recipeParams);
-    recipeToSave.save().then(() =>{
+    const recipes = [recipeToSave]
+    for (let index = 1; index < repeat; index++) {
+        day++;
+        if (day > 7) {
+            week++;
+            day = 1;
+        }
+        recipeParams['week'] = week;
+        recipeParams['day'] = day;
+        const rpeatRecipeToSave = new recipeData(recipeParams);
+        recipes.push(rpeatRecipeToSave)
+    }
+
+    recipeData.insertMany(recipes).then(() =>{
         console.log("success!!!");
         res.status(200).send();
     }).catch((e) => {
@@ -70,7 +87,16 @@ const getRecipesByIngredients = async(req, res) => {
 
   const getRecipesByUser = async(req, res) => {
     const user = req.query.user;
-    recipeData.find({userId: user}).then((recipes) =>{
+    const week = req.query.week;
+    const query ={userId: user};
+    if (week != null){
+        query['week'] = week;
+        query['approved'] = "approved";
+    }
+    else {
+        query['recipeType'] = 1;
+    }
+    recipeData.find(query).then((recipes) =>{
         res.send(recipes);
     }).catch((e) => {
         res.status(500).send();
@@ -78,11 +104,27 @@ const getRecipesByIngredients = async(req, res) => {
   } 
 
   const updateRecipe = async(req, res) => {
-    const user = req.query.user;
-    recipeData.find({userId: user}).then((recipes) =>{
-        res.send(recipes);
+    const id = req.body.id;
+    const day = req.body.day;
+    const week = req.body.week;
+    const hour = req.body.hour;
+    const description = req.body.description;
+    const ingredients = req.body.ingredients;
+    const recipeName = req.body.recipeName;
+    const recipeParams = {};
+    recipeParams['day'] = day;
+    recipeParams['hour'] = hour;
+    recipeParams['week'] = week;
+    recipeParams['ingredients'] = ingredients;
+    recipeParams['recipeName'] = recipeName;
+    recipeParams['description'] = description;
+    recipeParams['approved'] = "wating";
+    recipeParams['recipeName'] = recipeName;
+
+    recipeData.findOneAndUpdate({_id: id},recipeParams).then(() =>{
+        res.status(200).send();
     }).catch((e) => {
         res.status(500).send();
     });
   } 
-  module.exports={deleteRecipe,saveRecipe,getRecipesByIngredients,getRecipesByUser};
+  module.exports={updateRecipe,deleteRecipe,saveRecipe,getRecipesByIngredients,getRecipesByUser};
