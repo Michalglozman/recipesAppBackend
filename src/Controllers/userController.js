@@ -18,5 +18,17 @@ const loginUser = async(req, res) => {
         return res.status(500);
     })
 }
+const usersRecipes = async(req, res) => {
+    const userId = req.query.userId;
+    userData.find( { userId: { $ne:  userId } } )
+    .then((users) =>{
+        console.log(users)
+        res.setHeader("Content-Type", "text/plain");
+        return res.status(200).send(users);
+    }).catch((err)=>{
+        console.log(err);
+        return res.status(500);
+    })
+}
 
-module.exports={loginUser};
+module.exports={loginUser,usersRecipes};

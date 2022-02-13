@@ -116,6 +116,8 @@ const getRecipesByIngredients = async(req, res) => {
     }
     recipeData.find(query).then((recipes) =>{
         res.send(recipes);
+        console.log(`fetching recepies for ${user}`);
+        console.log(recipes);
     }).catch((e) => {
         res.status(500).send();
     });
@@ -143,16 +145,14 @@ const getRecipesByIngredients = async(req, res) => {
 
   const updateRecipe = async(req, res) => {
     const id = req.body.id;
-    const day = req.body.day;
-    const week = req.body.week;
-    const hour = req.body.hour;
     const description = req.body.description;
     const ingredients = req.body.ingredients;
-    const recipeName = req.body.recipeName;
+    const recipeName = req.body.name;
+    const imgUrl = req.body.imgurl;
+    const url = req.body.url;
     const recipeParams = {};
-    recipeParams['day'] = day;
-    recipeParams['hour'] = hour;
-    recipeParams['week'] = week;
+    recipeParams['image'] = imgUrl;
+    recipeParams['url'] = url;
     recipeParams['ingredients'] = ingredients;
     recipeParams['recipeName'] = recipeName;
     recipeParams['description'] = description;
