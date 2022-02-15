@@ -25,9 +25,9 @@ app.use((req, res, next) => {
 const userRouter = require("./src/Router/userRouter");
 const recipeRouter = require("./src/Router/recipeRouter.js");
 const recipeBlackListRouter = require("./src/Router/recipeBlackListRouter");
-app.use("/user/", userRouter);
-app.use("/recipe/", recipeRouter);
-app.use("/blacklist/", recipeBlackListRouter);
+app.use("/user", userRouter);
+app.use("/recipe", recipeRouter);
+app.use("/blacklist", recipeBlackListRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

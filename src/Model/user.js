@@ -1,21 +1,47 @@
-// const mongoose = require('mongoose');
+// const mongoose = require("mongoose");
 
-// const userData = mongoose.model('user', {
+// const userData = mongoose.model(
+//   "user",
+//   {
 //     userId: {
-//         type: String
+//       type: String,
 //     },
 //     firstName: {
-//         type: String
+//       type: String,
 //     },
-//     lastName:{
-//         type: String
+//     lastName: {
+//       type: String,
 //     },
-//     password:{
-//         type: String
+//     password: {
+//       type: String,
 //     },
 //     userType: {
-//         type: Number
-//     }
-// },'user');
+//       type: Number,
+//     },
+//   },
+//   "user"
+// );
 
-// module.exports = userData;
+const mongoose = require("mongoose");
+
+const UserSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+  },
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
+  userType: {
+    type: Number,
+  },
+});
+
+const UserModel = mongoose.model("user", UserSchema);
+
+module.exports = UserModel;

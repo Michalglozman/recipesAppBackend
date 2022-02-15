@@ -1,40 +1,85 @@
+// const mongoose = require("mongoose");
 
-// const mongoose = require('mongoose');
-
-// const recipeData = mongoose.model('recipes', {
+// const recipeData = mongoose.Schema(
+//   "recipes",
+//   {
 //     userId: {
-//         type: String
+//       type: String,
 //     },
 //     day: {
-//         type: String 
+//       type: String,
 //     },
 //     hour: {
-//         type: Number
+//       type: Number,
 //     },
 //     week: {
-//         type: Number
+//       type: Number,
 //     },
-//     image:{
-//         type: String
+//     image: {
+//       type: String,
 //     },
-//     url:{
-//         type: String
+//     url: {
+//       type: String,
 //     },
-//     recipeName:{
-//         type: String
+//     recipeName: {
+//       type: String,
 //     },
 //     approved: {
-//         type: String
+//       type: String,
 //     },
 //     recipeType: {
-//         type: Number
+//       type: Number,
 //     },
 //     ingredients: {
-//         type: String
+//       type: String,
 //     },
 //     description: {
-//         type: String
-//     }
-// },'recipes');
+//       type: String,
+//     },
+//   },
+//   "recipes"
+// );
 
 // module.exports = recipeData;
+
+const mongoose = require("mongoose");
+
+const recipeData = mongoose.Schema(
+  {
+    userId: {
+      type: String,
+    },
+    day: {
+      type: String,
+    },
+    hour: {
+      type: Number,
+    },
+    week: {
+      type: Number,
+    },
+    image: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
+    recipeName: {
+      type: String,
+    },
+    approved: {
+      type: String,
+    },
+    recipeType: {
+      type: Number,
+    },
+    ingredients: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+  },
+);
+
+module.exports = recipeData;
