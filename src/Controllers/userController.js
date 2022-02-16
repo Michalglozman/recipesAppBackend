@@ -1,3 +1,5 @@
+require('dotenv').config();
+const jwt = require('jsonwebtoken')
 const axios = require('axios');
 const userData = require('../Model/user');
 const path = require('path');
@@ -10,8 +12,8 @@ const loginUser = async(req, res) => {
         if(!user){
             return res.status(404).send("login failed");
         }
-        console.log(userId+" connected")
-
+        const accessToken=jwt.sign(userId,process.env.ACCESS_TOKEN_SECRET);
+        res.json({accessToken: accessToken})
         return res.status(200).send(user);
     }).catch((err)=>{
         console.log(err);
