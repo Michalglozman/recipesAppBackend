@@ -13,7 +13,10 @@ const saveRecipe = async(req, res) => {
     const userId = req.body.user;
     const description = req.body.description;
     const repeat = req.body.repeat;
-
+    let approved = req.body.approved;
+    console.log(approved);
+    approved = recipeType == 0 || approved == "approved";
+    console.log(approved);
     const recipeParams = {};
     recipeParams['day'] = day;
     recipeParams['image'] = imageUrl;
@@ -25,7 +28,7 @@ const saveRecipe = async(req, res) => {
     recipeParams['ingredients'] = ingredients;
     recipeParams['recipeName'] = recipeName;
     recipeParams['description'] = description;
-    recipeParams['approved'] = recipeType == 0 ? "approved" : "waiting";
+    recipeParams['approved'] = approved ? "approved" : "waiting";
     recipeParams['week'] = week;
     recipeParams['day'] = day;
     const recipeToSave = new recipeData(recipeParams);
@@ -143,6 +146,16 @@ const getRecipesByIngredients = async(req, res) => {
     });
   } 
 
+  const removeFromSchedule = async(req, res) => {
+    const id = req.body.id;
+    const recipeParams = {'week':-1}
+    recipeData.findOneAndUpdate({_id: id},recipeParams).then(() =>{
+        res.status(200).send();
+    }).catch((e) => {
+        res.status(500).send();
+    });
+  } 
+
   const updateRecipe = async(req, res) => {
     const id = req.body.id;
     const description = req.body.description;
@@ -156,7 +169,7 @@ const getRecipesByIngredients = async(req, res) => {
     recipeParams['ingredients'] = ingredients;
     recipeParams['recipeName'] = recipeName;
     recipeParams['description'] = description;
-    recipeParams['approved'] = "wating";
+    recipeParams['approved'] = "waiting";
     recipeParams['recipeName'] = recipeName;
 
     recipeData.findOneAndUpdate({_id: id},recipeParams).then(() =>{
@@ -165,4 +178,4 @@ const getRecipesByIngredients = async(req, res) => {
         res.status(500).send();
     });
   } 
-  module.exports={getRecipesToApprove,changeApprovalStatus,updateRecipe,deleteRecipe,saveRecipe,getRecipesByIngredients,getRecipesByUser};
+  module.exports={removeFromSchedule,getRecipesToApprove,changeApprovalStatus,updateRecipe,deleteRecipe,saveRecipe,getRecipesByIngredients,getRecipesByUser};

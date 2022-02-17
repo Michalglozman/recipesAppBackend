@@ -8,6 +8,7 @@ router.post('/', recipeController.saveRecipe);
 router.post('/approval',recipeController.changeApprovalStatus);
 router.get('/',  recipeController.getRecipesByUser);
 router.get('/approval',recipeController.getRecipesToApprove);
+router.post('/remove',recipeController.removeFromSchedule)
 router.delete('/',  recipeController.deleteRecipe);
 router.put('/',recipeController.updateRecipe);
 
