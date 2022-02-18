@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const recipeBlackListController = require('../Controllers/recipeBlackListController');
+const authController = require('../Controllers/authController');
 
-router.post('/', recipeBlackListController.addToBlackList );
+router.post('/', authController.authenticateJWT,recipeBlackListController.addToBlackList );
 module.exports = router;

@@ -4,23 +4,34 @@ const axios = require("axios");
 const userData = require("../Model/user");
 const path = require("path");
 
+activeTokens = [];
 const loginUser = async (req, res) => {
-  console.log("InTheFunction");
   const userId = req.query.userId;
   const password = req.query.password;
-  console.log(userId);
-  userData.findOne({ userId: userId, password: password });
-  console
-    .log("user:", user)
+  userData
+    .findOne({ userId: userId, password: password })
     .then((user) => {
       res.setHeader("Content-Type", "text/plain");
       if (!user) {
         return res.status(404).send("login failed");
       }
-      const accessToken = jwt.sign(userId, process.env.ACCESS_TOKEN_SECRET);
-      console.log(accessToken);
-      res.json({ accessToken: accessToken });
-      return res.status(200).send(user);
+      const accessToken = jwt.sign(
+        { id: userId },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "5h",
+        }
+      );
+      return res
+        .status(200)
+        .send({
+          user: {
+            userId: user.userId,
+            userType: user.userType,
+            userName: user.userName,
+          },
+          accessToken: accessToken,
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -28,16 +39,6 @@ const loginUser = async (req, res) => {
     });
 };
 
-// const loginUser = (req, res) => {
-//   const userId = req.query.userId;
-//   const password = req.query.password;
-//   userData.findOne({ userId: userId, password: password }).then((res) => {
-//     if (res.data.accessToken) {
-//       localStorage.setItem("user", JSON.stringify(res.data));
-//     }
-//     return res.data;
-//   });
-// };
 const usersRecipes = async (req, res) => {
   const userId = req.query.userId;
   userData
@@ -46,6 +47,10 @@ const usersRecipes = async (req, res) => {
       console.log(users);
       res.setHeader("Content-Type", "text/plain");
       return res.status(200).send(users);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500);
     })
     .catch((err) => {
       console.log(err);
