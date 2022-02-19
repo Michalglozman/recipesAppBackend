@@ -15,23 +15,15 @@ const loginUser = async (req, res) => {
       if (!user) {
         return res.status(404).send("login failed");
       }
-      const accessToken = jwt.sign(
-        { id: userId },
-        process.env.ACCESS_TOKEN_SECRET,
-        {
-          expiresIn: "5h",
-        }
-      );
-      return res
-        .status(200)
-        .send({
-          user: {
-            userId: user.userId,
-            userType: user.userType,
-            userName: user.userName,
-          },
-          accessToken: accessToken,
-        });
+        const accessToken=jwt.sign({id:userId},process.env.ACCESS_TOKEN_SECRET,{
+            expiresIn: "5h",
+          });
+        return res.status(200).send({user:{userId:user.userId,
+                                            userType:user.userType,
+                                            userName:user.firstName},accessToken:accessToken});
+    }).catch((err)=>{
+        console.log(err);
+        return res.status(500);
     })
     .catch((err) => {
       console.log(err);
