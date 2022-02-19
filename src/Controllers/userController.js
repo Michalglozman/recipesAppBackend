@@ -18,7 +18,7 @@ const loginUser = async(req, res) => {
           });
         return res.status(200).send({user:{userId:user.userId,
                                             userType:user.userType,
-                                            userName:user.userName},accessToken:accessToken});
+                                            userName:user.firstName},accessToken:accessToken});
     }).catch((err)=>{
         console.log(err);
         return res.status(500);

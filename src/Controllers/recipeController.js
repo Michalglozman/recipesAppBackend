@@ -72,7 +72,7 @@ const deleteRecipe = async(req, res) => {
 }
 
 const getBlackList = async () => {
-    const blacklist = await recipeBlackList.find({}).exec().then((blackList)=>{
+    const blacklist = await recipeBlackList.find({status:"deleted"}).exec().then((blackList)=>{
         return blackList.map((entry)=> {
             return entry['url'];
         });
